@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{% load comments %}
+{% block image %}
+  <meta name="twitter:card" content="summary">
+  {% with url=PAGE_URL|urljoin:MEDIA_URL %}
+    {% with cover=chapter.series.cover.name %}
+      <meta name="twitter:image" content="{{ url|add:cover }}">
+      <meta property="og:image" content="{{ url|add:cover }}">
+      <meta name="twitter:image:alt" content="Series Cover">
+      <meta property="og:image:alt" content="Series Cover">
+    {% endwith %}
+  {% endwith %}
+{% endblock %}
+{% block description %}
+  {# TODO: what would be a good description? #}
+  <meta name="twitter:description" content="">
+  <meta property="og:description" content="">
+  <meta name="description" content="">
+{% endblock %}
+{% block title %}
+  <meta name="title" content="Comments on {{ chapter.title }}">
+  {% with title=chapter.title|add:' ~ '|add:config.NAME %}
+    <meta name="twitter:title" content="Comments on {{ title }}">
+    <meta property="og:title" content="Comments on {{ title }}">
+  {% endwith %}
+  <title>Comments on {{ chapter.title }} &middot; {{ config.NAME }}</title>
+{% endblock %}
+{% block content %}
+  <h1>Comments</h1>
+  <article id="comments">
+    <section id="comments-links">
+      <h2>{% with series=chapter.series %}
+        <a class="link" href="{{ series.get_absolute_url }}">
+          {{ series.title }}
+        </a>
+      {% endwith %}</h2>
+      <h2>{% with vol=chapter.volume num=chapter.number %}
+        <a class="link" href="{{ chapter.get_absolute_url }}">
+          {% if vol > -1 %}Vol. {{ vol }},{% endif %}
+          {% if num > 0 %}Ch. {{ num|floatformat }} -{% endif %}
+          {{ chapter.title }}
+        </a>
+      {% endwith %}</h2>
+    </section>
+    <section id="comments-list">
+      {% render_comment_list for chapter %}
+    </section>
+    <section id="comments-form">
+      {% with next=request.path %}
+        {% render_comment_form for chapter %}
+      {% endwith %}
+    </section>
+  </article>
+{% endblock %}

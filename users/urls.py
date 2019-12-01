@@ -12,5 +12,5 @@ urlpatterns = [
     url('^edit/', edit_user, name='user_edit'),
     url('^logout/$', PostOnlyLogoutView.as_view(), name='account_logout'),
     url('^bookmarks/$', bookmarks, name='user_bookmarks'),
-    url('^comments/', include('user_comments.urls')),
+    url('^comments/', include('commentary.urls')),
 ] + allauth_urls
